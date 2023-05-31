@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.upf.mapper.MulticastMapper">
+    <resultMap id="BaseResultMap" type="com.upf.dto.MulticastDto">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="group_id" jdbcType="BIGINT" property="groupId" />
+        <result column="ip_from" jdbcType="VARCHAR" property="ipFrom" />
+        <result column="ip_to" jdbcType="VARCHAR" property="ipTo" />
+        <result column="gmt_created" jdbcType="TIMESTAMP" property="gmt_created" />
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmt_modified" />
+    </resultMap>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from multicast
+    </select>
+
+    <delete id="deleteById">
+        delete from multicast where id=#{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.upf.dto.MulticastDto">
+        INSERT INTO multicast(group_id,ip_from,ip_to,gmt_created,gmt_modified)
+        VALUES (#{groupId},#{ipFrom},#{ipTo},now(),now())
+    </insert>
+
+    <update id="update" parameterType="com.upf.dto.MulticastDto">
+        update multicast
+        <set>
+            <if test="groupId != null">
+                group_id=#{groupId},
+            </if>
+            <if test="ipFrom != null">
+                ip_from=#{ipFrom},
+            </if>
+            <if test="ipTo != null">
+                ip_to=#{ipTo},
+            </if>
+            gmt_modified=now()
+        </set>
+        where id=#{id}
+    </update>
+</mapper>
